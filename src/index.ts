@@ -12,7 +12,7 @@ export class LeetcodeRouletteAPI {
     });
   }
 
-  public async getProblems(options: ProblemOptions): Promise<Problem[]> {
+  public async getProblems(options: Partial<ProblemOptions>): Promise<Problem[]> {
     let problems: Problem[] = [];
 
     try {
@@ -40,7 +40,7 @@ export class LeetcodeRouletteAPI {
     return problem;
   }
 
-  public async getTags(options: Options): Promise<Tag[]> {
+  public async getTags(options: Partial<Options>): Promise<Tag[]> {
     let tags: Tag[] = [];
 
     try {
