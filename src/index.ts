@@ -2,13 +2,13 @@ import { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
 import API from "./api";
 import { Options, Problem, ProblemOptions, Tag } from "./interfaces";
 
-export class LeetcodeRouletteAPI {
+export default class LeetcodeRouletteAPI {
   private axiosInstance: AxiosInstance;
 
   constructor(hostname: string = "https://api.leetcoderoulette.com", configs: CreateAxiosDefaults = {}) {
     this.axiosInstance = API.getApiInstance({
       ...configs,
-      url: hostname
+      baseURL: hostname
     });
   }
 
@@ -31,7 +31,7 @@ export class LeetcodeRouletteAPI {
     let problem: Problem | undefined;
 
     try {
-      const data: AxiosResponse = await this.axiosInstance.get("/v1/problem/" + id);
+      const data: AxiosResponse = await this.axiosInstance.get(`/v1/problems/${id}`);
       problem = data.data.question;
     } catch(e) {
       console.log(e);
