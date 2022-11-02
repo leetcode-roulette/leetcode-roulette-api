@@ -22,8 +22,8 @@ export interface Problem {
   is_premium: boolean;
   description: string;
   hints: Array<string>;
-  acceptance: number;
-  submissions: number;
+  accepted: number;
+  submitted: number;
   acceptance_rate: string;
 }
 
