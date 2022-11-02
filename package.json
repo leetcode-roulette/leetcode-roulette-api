@@ -1,15 +1,15 @@
 {
   "name": "leetcode-roulette-api",
-  "version": "0.0.3",
+  "version": "0.1.1",
   "description": "API library for https://api.leetcoderoulette.com",
   "types": "./lib/cjs/types/index.d.ts",
   "main": "./lib/cjs/index.js",
   "type": "module",
   "scripts": {
     "clean": "rm -rf ./lib",
-    "build": "npm run clean && npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
-    "build:esm": "tsc -p ./configs/tsconfig.esm.json",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:cjs": "tsc -p ./config/tsconfig.cjs.json",
+    "build:esm": "tsc -p ./config/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
     "prepack": "npm run build",
     "test": "jest --passWithNoTests",
     "test:ci": "jest --coverage"

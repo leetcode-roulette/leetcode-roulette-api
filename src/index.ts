@@ -1,12 +1,48 @@
-import { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
-import API from "./api";
-import { Options, Problem, ProblemOptions, Tag } from "./interfaces";
+import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
+
+export interface Options {
+  q: string[];
+  sort: string;
+  limit: number;
+  offset: number;
+}
+
+export interface ProblemOptions extends Options {
+  tags: string[];
+  difficulty: number[];
+  premium: boolean;
+}
+
+export interface Problem {
+  title: string;
+  title_slug: string;
+  tags: string[];
+  id: number;
+  frontend_id: number;
+  is_premium: boolean;
+  description: string;
+  hints: Array<string>;
+  acceptance: number;
+  submissions: number;
+  acceptance_rate: string;
+}
+
+export interface Tag {
+  name: string;
+  tag_slug: string;
+}
+
+interface Params {
+  tags: string;
+  difficulty: string;
+  premium: boolean;
+}
 
 export default class LeetcodeRouletteAPI {
   private axiosInstance: AxiosInstance;
 
   constructor(hostname: string = "https://api.leetcoderoulette.com", configs: CreateAxiosDefaults = {}) {
-    this.axiosInstance = API.getApiInstance({
+    this.axiosInstance = axios.create({
       ...configs,
       baseURL: hostname
     });
@@ -17,14 +53,28 @@ export default class LeetcodeRouletteAPI {
 
     try {
       const data = await this.axiosInstance.get("/v1/problems", {
-        params: options
+        params: {...options, ...this.getParamaterizedOptions(options)}
       });
       problems = data.data.questions;
     } catch(e) {
-      console.log(e);
+      throw e;
     }
 
     return problems;
+  }
+
+  private getParamaterizedOptions(options?: Partial<ProblemOptions>): Object | undefined {
+    if (!options) {
+      return;
+    }
+
+    const params: Params = {
+      tags: options.tags ? options.tags.join(",") : "",
+      difficulty: options.difficulty ? options.difficulty.map(difficulty => difficulty.toString()).join(",") : "",
+      premium: Boolean(options.premium)
+    };
+
+    return params;
   }
 
   public async getProblem(id: number): Promise<Problem | undefined> {
@@ -34,7 +84,7 @@ export default class LeetcodeRouletteAPI {
       const data: AxiosResponse = await this.axiosInstance.get(`/v1/problems/${id}`);
       problem = data.data.question;
     } catch(e) {
-      console.log(e);
+      throw e;
     }
 
     return problem;
@@ -50,16 +100,9 @@ export default class LeetcodeRouletteAPI {
 
       tags = data.data.tags;
     } catch(e) {
-      console.log(e);
+      throw e;
     }
 
     return tags;
   }
-}
-
-export {
-  Options,
-  ProblemOptions,
-  Problem,
-  Tag
 }

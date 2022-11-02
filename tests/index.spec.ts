@@ -11,6 +11,16 @@ describe("GET /v1/problems", () => {
     const problems: Problem[] = await api.getProblems();
     expect(problems).not.toBeUndefined();
   });
+
+  test("Successfully gets problems with filters", async () => {
+    const api: LeetcodeRouletteAPI = new LeetcodeRouletteAPI(process.env.API_HOSTNAME);
+    const problems: Problem[] = await api.getProblems({
+      tags: ["array"],
+      difficulty: [1],
+      premium: false
+    });
+    expect(problems).not.toBeUndefined();
+  });
 });
 
 describe("GET /v1/problem/:id", () => {
@@ -26,5 +36,5 @@ describe("GET /v1/tags", () => {
     const api: LeetcodeRouletteAPI = new LeetcodeRouletteAPI(process.env.API_HOSTNAME);
     const tags: Tag[] = await api.getTags();
     expect(tags).not.toBeUndefined();
-  })
+  });
 });
